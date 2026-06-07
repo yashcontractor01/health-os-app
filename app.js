@@ -8,8 +8,8 @@ const LS = { settings:'healthos.settings', master:'healthos.master', chat:'healt
 const DEFAULTS = {
   provider:'claude',                         // pick any in Settings: Claude / ChatGPT / Gemini
   claudeKey:'', claudeModel:'claude-sonnet-4-6',
-  openaiKey:'', openaiModel:'gpt-4o',
-  geminiKey:'', geminiModel:'gemini-2.0-flash',
+  openaiKey:'', openaiModel:'gpt-4o', openaiBase:'https://api.openai.com/v1',
+  geminiKey:'', geminiModel:'gemini-2.5-flash',
   ghToken:'', ghOwner:'yashcontractor01', ghRepo:'health-os', ghPath:'Yash_Health_OS.md', ghBranch:'main',
   autoBackup:true
 };
@@ -27,7 +27,7 @@ init();
 async function init(){
   if('serviceWorker' in navigator){ try{ await navigator.serviceWorker.register('sw.js'); }catch(e){} }
   if(!master){ await trySeed(); }
-  if(!master && settings.ghToken){ await pullFromGitHub(); }
+  if(settings.ghToken){ await pullFromGitHub(); }   // always pull the latest from GitHub on open → syncs every device
   wire();
   renderAll();
   updateBadge();
